@@ -1,4 +1,18 @@
 const marked = require('./marked.min')
+marked.setOptions({
+    renderer: new marked.Renderer(),
+    highlight: function(code) {
+        return hljs.highlightAuto(code).value
+    },
+    pedantic: false,
+    gfm: true,
+    tables: true,
+    breaks: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+    xhtml: false
+})
 window.$ = window.jQuery = require('./jquery')
 var currentFile = null
 var saved = true
@@ -12,9 +26,9 @@ var contentRender = function() {
     var content = $('#editor').val()
     $('#preview').html(marked(content))
     // 高亮代码
-    $('pre code').each(function(i, block) {
-        hljs.highlightBlock(block)
-    })
+    // $('pre code').each(function(i, block) {
+    //     hljs.highlightBlock(block)
+    // })
 }
 
 var saveFile = function(path, data) {
