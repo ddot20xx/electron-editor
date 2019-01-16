@@ -2,28 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hello</title>
+    <title>新文件</title>
+    <link rel="stylesheet" href="./bootstrap.min.css">
     <style>
-        html, body {
+        html, body, #main {
+            width: 100%;
+            height: 99.9%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
             font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
-            font-size: 16px;
+            font-size: 15px;
             color: #333;
+
         }
-        #content {
-            width: 600px;
-            height: 400px;
-            border: 1px solid grey;
+        p {
+            margin: 10px 0;
         }
+        a {
+            background-color: transparent;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        blockquote {
+            font-size: 14.5px;
+            border-color: lightcoral;
+        }
+        code {
+            font-size: 86%;
+            color: lightcoral;
+        }
+        #editor {
+            float: left;
+            width: 50%;
+            height: 100%;
+            resize: none;
+            padding: 10px;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 15px;
+            color: inherit;
+            text-align: justify;
+            line-height: 18px;
+        }
+        #preview {
+            float: left;
+            width: 49.5%;
+            height: 100%;
+            border: 1px solid #ccc;
+            padding: 15px 10px 10px 15px;
+            margin: 0;
+            overflow-y: scroll;
+            box-sizing: border-box;
+            text-align: justify;
+            line-height: 18px;
+            color: inherit;
+            font-family: inherit;
+            letter-spacing: 0.85;
+        }
+        #preview::after {
+            content: '';
+            display: inline-block;
+            clear: both;
+        }
+
     </style>
 </head>
 <body>
-    <h2>Hello Electron</h2>
-    <button id="id-btn-new">新建文档</button>
-    <p>This is my first app.</p>
-    <p id="id1">ididid</p>
-    <p id="id2">据央视新闻客户端消息，今天（15日），嫦娥四号上搭载的生物科普试验载荷发布了最新试验照片，照片显示试验搭载的棉花种子已经长出了嫩芽，这也标志着嫦娥四号完成了人类在月面进行的首次生物实验。</p>
-    <p>根据资料显示，这是由教育部深空探测联合研究中心组织，重庆大学牵头的科普载荷“月面微型生态圈”的成果。</p>
-    <div id="content"></div>
+    <div id="main">
+        <textarea id="editor"></textarea>
+        <div id="preview"></div>
+    </div>
 
     <!-- <script src="./jquery.js"></script> -->
     <!-- <script src="./marked.min.js"></script> -->
@@ -31,26 +82,36 @@
         const marked = require('./marked.min')
         window.$ = window.jQuery = require('./jquery')
 
-        var content = marked('# 标题一\r\n\r\n**strong fafdsa text**')
-        $('#content').html(content)
-        $('#id-btn-new').click(function() {
-            $('#content').html('')
+        // markdown 渲染
+        $('#editor').keyup(function() {
+            var content = marked($('#editor').val())
+            $('#preview').html(content)
         })
 
-        // 使用 remote 读取主进程中的数据
-        // console.log(require('electron').remote.getGlobal('shareObj').test)
 
+        // 文件菜单
         const { ipcRenderer } = require('electron')
-
 
         ipcRenderer.on('file-action', (event, arg) => {
             // console.log(typeof arg, arg)
             switch (arg) {
                 // 新建文件
                 case 'new-file':
-                    $('#content').html('')
+                    $('#editor').val('')
+                    $('#preview').html('')
                     break
                 // 打开文件
+                case 'open-file':
+
+                    break
+                // 保存文件
+                case 'save-file':
+
+                    break
+                // 保存为
+                case 'open-file-as':
+
+                    break
             }
         })
 

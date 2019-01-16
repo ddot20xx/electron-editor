@@ -88,7 +88,7 @@ const template = [
 
 
 function createWindow () {
-    win = new BrowserWindow({ width: 800, height: 600 })
+    win = new BrowserWindow({ width: 960, height: 520 })
 
     const menu = Menu.buildFromTemplate(template)
     // 自定义菜单项
@@ -98,6 +98,31 @@ function createWindow () {
             win.webContents.send('file-action', 'new-file')   // channel, arg
         },
         accelerator: 'CmdOrCtrl+N'
+    }))
+    menu.items[0].submenu.append(new MenuItem({
+        label: '打开',
+        click () {
+            win.webContents.send('file-action', 'open-file')   // channel, arg
+        },
+        accelerator: 'CmdOrCtrl+O'
+    }))
+    menu.items[0].submenu.append(new MenuItem({
+        label: '保存',
+        click () {
+            win.webContents.send('file-action', 'save-file')   // channel, arg
+        },
+        accelerator: 'CmdOrCtrl+S'
+    }))
+    menu.items[0].submenu.append(new MenuItem({
+        label: '保存为',
+        click () {
+            win.webContents.send('file-action', 'save-file-as')   // channel, arg
+        }
+    }))
+    menu.items[0].submenu.append(new MenuItem({
+        label: '退出',
+        role: 'quit',
+        accelerator: 'CmdOrCtrl+Q'
     }))
 
 
@@ -161,10 +186,4 @@ if (process.platform === 'darwin') {
     { type: 'separator' },
     { role: 'front' }
   ]
-}
-
-
-// 使用 remote 模块进行进程间通信
-global.shareObj = {
-    test: 'main thread data'
 }
