@@ -12,15 +12,6 @@ const template = [
         label: '编辑',
         submenu: [
             {
-                label: '撤销',
-                role: 'undo'
-            },
-            {
-              label: '重做',
-              role: 'redo'
-            },
-            { type: 'separator' },
-            {
                 label: '剪切',
                 role: 'cut',
                 accelerator: 'CmdOrCtrl+X'
@@ -73,19 +64,18 @@ const template = [
         ]
     },
     {
-        label: '帮助',
+        label: '关于',
         submenu: [
             {
-                label: '更多',
+                label: '关于',
                 role: 'help',
                 click () {
-                     require('electron').shell.openExternal('https://electronjs.org')
+                     require('electron').shell.openExternal('http://www.ddot.cc')
                  }
             }
         ]
     }
 ]
-
 
 function createWindow () {
     win = new BrowserWindow({ width: 960, height: 520 })
@@ -114,7 +104,7 @@ function createWindow () {
         accelerator: 'CmdOrCtrl+S'
     }))
     menu.items[0].submenu.append(new MenuItem({
-        label: '保存为',
+        label: '另存为',
         click () {
             win.webContents.send('file-action', 'save-file-as')   // channel, arg
         }
@@ -124,7 +114,6 @@ function createWindow () {
         role: 'quit',
         accelerator: 'CmdOrCtrl+Q'
     }))
-
 
     Menu.setApplicationMenu(menu)
 
@@ -138,17 +127,18 @@ function createWindow () {
 }
 
 app.on('ready', createWindow)
+
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
     }
 })
+
 app.on('activate', () => {
     if (win === null) {
         createWindow()
     }
 })
-
 
 if (process.platform === 'darwin') {
   template.unshift({

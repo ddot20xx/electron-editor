@@ -2,121 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>新文件</title>
+    <title>新文档</title>
     <link rel="stylesheet" href="./bootstrap.min.css">
-    <style>
-        html, body, #main {
-            width: 100%;
-            height: 99.9%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
-            font-size: 15px;
-            color: #333;
-
-        }
-        p {
-            margin: 10px 0;
-        }
-        a {
-            background-color: transparent;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        blockquote {
-            font-size: 14.5px;
-            border-color: lightcoral;
-        }
-        code {
-            font-size: 86%;
-            color: lightcoral;
-        }
-        #editor {
-            float: left;
-            width: 50%;
-            height: 100%;
-            resize: none;
-            padding: 10px;
-            margin: 0;
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: 15px;
-            color: inherit;
-            text-align: justify;
-            line-height: 18px;
-        }
-        #preview {
-            float: left;
-            width: 49.5%;
-            height: 100%;
-            border: 1px solid #ccc;
-            padding: 15px 10px 10px 15px;
-            margin: 0;
-            overflow-y: scroll;
-            box-sizing: border-box;
-            text-align: justify;
-            line-height: 18px;
-            color: inherit;
-            font-family: inherit;
-            letter-spacing: 0.85;
-        }
-        #preview::after {
-            content: '';
-            display: inline-block;
-            clear: both;
-        }
-
-    </style>
+    <link rel="stylesheet" href="./index.css">
 </head>
 <body>
     <div id="main">
-        <textarea id="editor"></textarea>
+        <textarea id="editor" autofocus></textarea>
         <div id="preview"></div>
     </div>
-
-    <!-- <script src="./jquery.js"></script> -->
-    <!-- <script src="./marked.min.js"></script> -->
-    <script>
-        const marked = require('./marked.min')
-        window.$ = window.jQuery = require('./jquery')
-
-        // markdown 渲染
-        $('#editor').keyup(function() {
-            var content = marked($('#editor').val())
-            $('#preview').html(content)
-        })
-
-
-        // 文件菜单
-        const { ipcRenderer } = require('electron')
-
-        ipcRenderer.on('file-action', (event, arg) => {
-            // console.log(typeof arg, arg)
-            switch (arg) {
-                // 新建文件
-                case 'new-file':
-                    $('#editor').val('')
-                    $('#preview').html('')
-                    break
-                // 打开文件
-                case 'open-file':
-
-                    break
-                // 保存文件
-                case 'save-file':
-
-                    break
-                // 保存为
-                case 'open-file-as':
-
-                    break
-            }
-        })
-
-    </script>
-
-
+    <script src="index.js"></script>
 </body>
 </html>
