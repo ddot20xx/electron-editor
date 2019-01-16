@@ -11,6 +11,10 @@ var readText = function(f) {
 var contentRender = function() {
     var content = $('#editor').val()
     $('#preview').html(marked(content))
+    // 高亮代码
+    $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block)
+    })
 }
 
 var saveFile = function(path, data) {
