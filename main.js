@@ -156,8 +156,10 @@ var createWindow = function() {
 
     win.loadFile('index.html')
 
-    win.webContents.openDevTools()
-
+    // win.webContents.openDevTools()
+    global.previewHTML = {
+        content: ''
+    }
     win.on('closed', () => {
         win = null
     })

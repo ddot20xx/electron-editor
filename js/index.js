@@ -134,24 +134,21 @@ var openFile = function() {
     }
 }
 
-var printToPDF = function() {
+var openPreviewWindow = function(content) {
+    // 创建一个窗口，加载预览页面，页面中有两个按钮和 content 。
+    // 确定：点击调用printToPDF(), 完成后提示信息。
+    // 取消：关闭该窗口。
     var { remote } = require('electron')
-    var fs = require('fs')
-    var contents = remote.getCurrentWebContents()
-    contents.printToPDF({}, (error, data) => {
-        if (error) throw error
-        fs.writeFile('./print.pdf', data, (error) => {
-            if (error) throw error
-            // console.log('Write PDF successfully.')
-        })
-    })
+    var win = new remote.BrowserWindow({width: 780, height: 800 })
+    win.loadFile('preview.html')
+    // win.webContents.openDevTools()
+    remote.getGlobal('previewHTML').content = content
 }
 
 var setFileMenu = function() {
     // 文件菜单
     const { dialog, ipcRenderer, remote } = require('electron')
     ipcRenderer.on('file-action', (event, arg) => {
-        // console.log(typeof arg, arg)
         switch (arg) {
             // 新建文件
             case 'new-file':
@@ -175,14 +172,14 @@ var setFileMenu = function() {
             // 导出为PDF
             case 'print-to-pdf':
                 var output = $('#preview').html()
-                var pdfStyle = {
-                    width: '90%',
-                    padding: '10px',
-                    margin: '0 auto'
-                }
-                $('#main').html(output).css(pdfStyle)
-                // TODO: 取得文档的文件名，传入打印函数，作为 pdf 文档的文件名
-                printToPDF()
+                openPreviewWindow(output)
+                // var pdfStyle = {
+                //     width: '90%',
+                //     padding: '10px',
+                //     margin: '0 auto'
+                // }
+                // $('#main').html(output).css(pdfStyle)
+                // printToPDF()
                 break
         }
     })
@@ -195,7 +192,7 @@ var __main = function() {
         // 更新文档标题状态
         if (saved) {
             saved = false
-            document.title += ' *'            
+            document.title += ' *'
         }
     })
 
