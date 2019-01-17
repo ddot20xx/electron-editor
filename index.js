@@ -37,6 +37,7 @@ var saveFile = function(path, data) {
 }
 
 var saveCurrentFile = function() {
+    var { remote } = require('electron')
     if (!currentFile) {
         var file = remote.dialog.showSaveDialog(remote.getCurrentWindow(), {
             filters: [
@@ -58,6 +59,7 @@ var saveCurrentFile = function() {
 }
 
 var needSaved = function() {
+    var { remote } = require('electron')
     if (saved) {
         return
     }
@@ -80,7 +82,7 @@ var updateFileTitle = function() {
     }
 }
 
-var scrollSync = function () {
+var scrollSync = function() {
     var $scrollDivs = $('textarea#editor, div#preview')
     var sync = function(e) {
        var $other = $scrollDivs.not(this).off('scroll')
@@ -94,6 +96,47 @@ var scrollSync = function () {
     $scrollDivs.on('scroll', sync)
 }
 
+var createNewFile = function() {
+    currentFile = null
+    saved = true
+    document.title = '新文档'
+    $('#editor').val('')
+    $('#preview').html('')
+}
+
+var openFile = function() {
+    var { remote } = require('electron')
+    var files = remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
+        filters: [
+            { name: 'Text Files', extensions: ['txt'] },
+            { name: 'Markdown Files', extensions: ['md'] },
+            { name: 'All Files', extensions: ['*'] }
+        ],
+        properties: ['openFile']
+    })
+    if (files) {
+        currentFile = files[0]
+        var txtRead = readText(currentFile)
+        $('#editor').val(txtRead)
+        contentRender()
+        document.title = currentFile
+        saved = true
+    }
+}
+
+var printToPDF = function() {
+    var { remote } = require('electron')
+    var fs = require('fs')
+    var contents = remote.getCurrentWebContents()
+    contents.printToPDF({}, (error, data) => {
+        if (error) throw error
+        fs.writeFile('./print.pdf', data, (error) => {
+            if (error) throw error
+            // console.log('Write PDF successfully.')
+        })
+    })
+}
+
 var setFileMenu = function() {
     // 文件菜单
     const { dialog, ipcRenderer, remote } = require('electron')
@@ -103,31 +146,12 @@ var setFileMenu = function() {
             // 新建文件
             case 'new-file':
                 needSaved()
-                currentFile = null
-                saved = true
-                document.title = '新文档'
-                $('#editor').val('')
-                $('#preview').html('')
+                createNewFile()
                 break
             // 打开文件
             case 'open-file':
                 needSaved()
-                var files = remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
-                    filters: [
-                        { name: 'Text Files', extensions: ['txt'] },
-                        { name: 'Markdown Files', extensions: ['md'] },
-                        { name: 'All Files', extensions: ['*'] }
-                    ],
-                    properties: ['openFile']
-                })
-                if (files) {
-                    currentFile = files[0]
-                    var txtRead = readText(currentFile)
-                    $('#editor').val(txtRead)
-                    contentRender()
-                    document.title = currentFile
-                    saved = true
-                }
+                openFile()
                 break
             // 保存文件
             case 'save-file':
@@ -137,6 +161,18 @@ var setFileMenu = function() {
             case 'save-file-as':
                 currentFile = null
                 saveCurrentFile()
+                break
+            // 导出为PDF
+            case 'print-to-pdf':
+                var output = $('#preview').html()
+                var pdfStyle = {
+                    width: '90%',
+                    padding: '10px',
+                    margin: '0 auto'
+                }
+                $('#main').html(output).css(pdfStyle)
+                // TODO: 取得文档的文件名，传入打印函数，作为 pdf 文档的文件名
+                printToPDF()
                 break
         }
     })
@@ -159,7 +195,7 @@ var __main = function() {
     // 同步滚动
     scrollSync()
 
-    // 设置文件菜单的内容
+    // 设置文件菜单的方法
     setFileMenu()
 }
 
