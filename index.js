@@ -36,7 +36,7 @@ var saveFile = function(path, data) {
     fs.writeFileSync(path, data)
 }
 
-var saveCurrentFile = function() {
+var filePath = function() {
     var { remote } = require('electron')
     if (!currentFile) {
         var file = remote.dialog.showSaveDialog(remote.getCurrentWindow(), {
@@ -50,9 +50,27 @@ var saveCurrentFile = function() {
             currentFile = file
         }
     }
-    if (currentFile) {
+    return currentFile
+}
+
+var saveCurrentFile = function() {
+    var { remote } = require('electron')
+    // if (!currentFile) {
+    //     var file = remote.dialog.showSaveDialog(remote.getCurrentWindow(), {
+    //         filters: [
+    //             { name: "Text Files", extensions: ['txt'] },
+    //             { name: "Markdown Files", extensions: ['md'] },
+    //             { name: 'All Files', extensions: ['*'] }
+    //         ]
+    //     })
+    //     if (file) {
+    //         currentFile = file
+    //     }
+    // }
+    var path = filePath()
+    if (path) {
         var data = $('#editor').val()
-        saveFile(currentFile, data)
+        saveFile(path, data)
         saved = true
         document.title = currentFile
     }
@@ -181,15 +199,20 @@ var __main = function() {
     // markdown 渲染
     $('#editor').keyup(function() {
         contentRender()
-    })
-
-    // 更新文档标题
-    $('#editor').keydown(function() {
+        // 更新文档标题状态
         if (saved) {
             saved = false
             updateFileTitle()
         }
     })
+
+    // 更新文档标题
+    // $('#editor').keydown(function() {
+    //     if (saved) {
+    //         saved = false
+    //         updateFileTitle()
+    //     }
+    // })
 
     // 同步滚动
     scrollSync()
