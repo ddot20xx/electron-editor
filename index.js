@@ -78,7 +78,6 @@ var updateFileTitle = function() {
     if (!saved) {
         document.title += ' *'
         saved = false
-
     }
 }
 

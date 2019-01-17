@@ -87,43 +87,58 @@ const template = [
     }
 ]
 
+// 文件菜单增加菜单项
+var appendMenuItem = function(win, menu, label, eventName, shotcutKey) {
+    menu.items[0].submenu.append(new MenuItem({
+        label: label,
+        click () {
+            win.webContents.send('file-action', eventName)   // channel, arg
+        },
+        accelerator: shotcutKey
+    }))
+}
+
 var customMenus = function(win) {
     const menu = Menu.buildFromTemplate(template)
+    appendMenuItem(win, menu, '新建', 'new-file', 'CmdOrCtrl+N')
+    appendMenuItem(win, menu, '打开', 'open-file', 'CmdOrCtrl+O')
+    appendMenuItem(win, menu, '保存', 'save-file', 'CmdOrCtrl+S')
+    appendMenuItem(win, menu, '另存为', 'save-file-as', null)
+    appendMenuItem(win, menu, '导出为PDF', 'print-to-pdf', null)
     // 自定义菜单项
-    menu.items[0].submenu.append(new MenuItem({
-        label: '新建',
-        click () {
-            win.webContents.send('file-action', 'new-file')   // channel, arg
-        },
-        accelerator: 'CmdOrCtrl+N'
-    }))
-    menu.items[0].submenu.append(new MenuItem({
-        label: '打开',
-        click () {
-            win.webContents.send('file-action', 'open-file')   // channel, arg
-        },
-        accelerator: 'CmdOrCtrl+O'
-    }))
-    menu.items[0].submenu.append(new MenuItem({
-        label: '保存',
-        click () {
-            win.webContents.send('file-action', 'save-file')   // channel, arg
-        },
-        accelerator: 'CmdOrCtrl+S'
-    }))
-    menu.items[0].submenu.append(new MenuItem({
-        label: '另存为',
-        click () {
-            win.webContents.send('file-action', 'save-file-as')   // channel, arg
-        }
-    }))
-
-    menu.items[0].submenu.append(new MenuItem({
-        label: '导出为PDF',
-        click () {
-            win.webContents.send('file-action', 'print-to-pdf')   // channel, arg
-        }
-    }))
+    // menu.items[0].submenu.append(new MenuItem({
+    //     label: '新建',
+    //     click () {
+    //         win.webContents.send('file-action', 'new-file')   // channel, arg
+    //     },
+    //     accelerator: 'CmdOrCtrl+N'
+    // }))
+    // menu.items[0].submenu.append(new MenuItem({
+    //     label: '打开',
+    //     click () {
+    //         win.webContents.send('file-action', 'open-file')   // channel, arg
+    //     },
+    //     accelerator: 'CmdOrCtrl+O'
+    // }))
+    // menu.items[0].submenu.append(new MenuItem({
+    //     label: '保存',
+    //     click () {
+    //         win.webContents.send('file-action', 'save-file')   // channel, arg
+    //     },
+    //     accelerator: 'CmdOrCtrl+S'
+    // }))
+    // menu.items[0].submenu.append(new MenuItem({
+    //     label: '另存为',
+    //     click () {
+    //         win.webContents.send('file-action', 'save-file-as')   // channel, arg
+    //     }
+    // }))
+    // menu.items[0].submenu.append(new MenuItem({
+    //     label: '导出为PDF',
+    //     click () {
+    //         win.webContents.send('file-action', 'print-to-pdf')   // channel, arg
+    //     }
+    // }))
 
     menu.items[0].submenu.append(new MenuItem({
         label: '退出',
