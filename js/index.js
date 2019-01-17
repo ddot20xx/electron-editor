@@ -1,4 +1,4 @@
-const marked = require('./marked.min')
+var marked = require('./js/marked.min')
 marked.setOptions({
     renderer: new marked.Renderer(),
     highlight: function(code) {
@@ -13,7 +13,7 @@ marked.setOptions({
     smartypants: false,
     xhtml: false
 })
-window.$ = window.jQuery = require('./jquery')
+window.$ = window.jQuery = require('./js/jquery')
 var currentFile = null
 var saved = true
 
