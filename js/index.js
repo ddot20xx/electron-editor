@@ -92,13 +92,6 @@ var needSaved = function() {
     }
 }
 
-var updateFileTitle = function() {
-    if (!saved) {
-        document.title += ' *'
-        saved = false
-    }
-}
-
 var scrollSync = function() {
     var $scrollDivs = $('textarea#editor, div#preview')
     var sync = function(e) {
@@ -202,17 +195,9 @@ var __main = function() {
         // 更新文档标题状态
         if (saved) {
             saved = false
-            updateFileTitle()
+            document.title += ' *'            
         }
     })
-
-    // 更新文档标题
-    // $('#editor').keydown(function() {
-    //     if (saved) {
-    //         saved = false
-    //         updateFileTitle()
-    //     }
-    // })
 
     // 同步滚动
     scrollSync()
