@@ -1,4 +1,4 @@
-var { app, BrowserWindow, Menu, MenuItem, ipcMain, Tray } = require('electron')
+var { app, BrowserWindow, Menu, MenuItem, ipcMain } = require('electron')
 let win
 
 // 自定义菜单模板
@@ -149,8 +149,7 @@ var customMenus = function(win) {
     Menu.setApplicationMenu(menu)
 }
 
-var createWindow = function() {
-    var appIcon = new Tray('./image/logo_d.png')
+var createWindow = function() {    
     win = new BrowserWindow({ width: 960, height: 520, icon: './image/logo_x.png' })
 
     customMenus(win)
