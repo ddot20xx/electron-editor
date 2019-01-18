@@ -22,9 +22,19 @@ var readText = function(f) {
     return fs.readFileSync(f, 'utf8')
 }
 
+var formatTable = function() {
+    $('table').addClass('table table-striped table-bordered')
+    $('table').css({'width': '80%', 'margin': '1rem', 'text-align': 'center'})
+    $('table thead th').css('text-align', 'center')
+    $("tr:even").addClass('active')
+    $('thead > tr').addClass('success')
+}
+
 var contentRender = function() {
     var content = $('#editor').val()
     $('#preview').html(marked(content))
+    // 为表格添加样式
+    formatTable()
     // 高亮代码
     // $('pre code').each(function(i, block) {
     //     hljs.highlightBlock(block)
@@ -139,7 +149,7 @@ var openPreviewWindow = function(content) {
     // 确定：点击调用printToPDF(), 完成后提示信息。
     // 取消：关闭该窗口。
     var { remote } = require('electron')
-    var win = new remote.BrowserWindow({width: 780, height: 800 })
+    var win = new remote.BrowserWindow({width: 720, height: 600, icon: './image/logo_x.png' })
     win.loadFile('preview.html')
     // win.webContents.openDevTools()
     remote.getGlobal('previewHTML').content = content

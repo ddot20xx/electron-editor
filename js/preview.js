@@ -24,7 +24,8 @@ var showMsgDialog = function(type, title, message) {
     var option = {
         type: type,
         title: title,
-        message: message
+        message: message,
+        buttons: ['确定']
     }
     var infoResponse = remote.dialog.showMessageBox(option)
     if (infoResponse == 0) {
